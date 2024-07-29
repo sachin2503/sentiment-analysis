@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment-analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+     rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+     crossorigin="anonymous">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+</head>
+<style>
+    @media (min-width: 870px){
+    *, *::after, *::before{
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+    }
+    body{
+        font-family: system-ui!important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+    .container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 700px;
+    }
+    a{
+        text-decoration: none;
+    }
+
+    /* NavBar */
+    nav{
+        
+        padding: 20px;
+    }
+    nav {
+        position: fixed;
+        width: 100%;
+        z-index: 999;
+        padding: 30px 0;
+        transition: all 0.3s ease;
+      }
+      
+    nav {
+        padding: 15px 0;
+        background: #d6dde5;
+      }
+    nav ul{
+        display: flex;
+        justify-content: space-around;
+    }
+    nav ul a{
+        text-decoration: none;
+        font-size: 1.25rem;
+        color: black;
+        font-weight: 600;
+    }
+    nav .logo a {
+        color: #fff;
+        font-size: 25px;
+        font-weight: 600;
+      }
+      
+      /*  Nav Logo Span Linear-Gradient  */
+      nav .logo a span {
+        background: linear-gradient(135deg, #041d3d, #fff, crimson);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.3s ease;
+      }
+      
+      nav.sticky .logo a span {
+        color: #fff;
+      }
+     /* arrow */
+     .arrows{
+        display: flex;
+        gap: 3.75rem;
+     }
+     .arrow {
+        transform: translate(-50%, -50%);
+        transform: rotate(270deg);
+        cursor: pointer;
+    }
+    
+    .arrow span {
+        display: block;
+        width: 1.5vw;
+        height: 1.5vw;
+        border-bottom: 5px solid rgb(0, 0, 0);
+        border-right: 5px solid rgb(0, 0, 0);
+        transform: rotate(45deg);
+        margin: -10px;
+        animation: animate 2s infinite;
+    }
+    
+    .arrow span:nth-child(2) {
+        animation-delay: -0.2s;
+    }
+    
+    .arrow span:nth-child(3) {
+        animation-delay: -0.4s;
+    }
+    
+    @keyframes animate {
+        0% {
+            opacity: 0;
+            transform: rotate(45deg) translate(-20px, -20px);
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: rotate(45deg) translate(20px, 20px);
+        }
+    }
+
+    /* Heading */
+        @import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
+        .parent1 {
+            margin-top: 7rem;
+            margin-bottom: 2rem;
+          text-align:center;
+          /* background:linear-gradient(141deg, #ccc 25%, #eee 40%, #ddd 55%); */
+          color:#555;
+          font-family:'Roboto';
+          font-weight:800;
+          font-size:40px;
+          overflow:hidden;
+          -webkit-backface-visibility: hidden;
+          -webkit-perspective: 1000;
+          -webkit-transform: translate3d(0,0,0);
+        }
+        
+        .parent1 div {
+          display:inline-block;
+          overflow:hidden;
+          white-space:nowrap;
+        }
+        
+        .parent1 div:first-of-type {    /* For increasing performance 
+                               ID/Class should've been used. 
+                               For a small demo 
+                               it's okaish for now */
+          animation: showup 7s infinite;
+        }
+        
+        .parent1 div:last-of-type {
+          width:0px;
+          animation: reveal 7s infinite;
+        }
+        
+        .parent1 div:last-of-type span {
+          margin-left:-355px;
+          animation: slidein 7s infinite;
+        }
+        
+        @keyframes showup {
+            0% {opacity:0;}
+            20% {opacity:1;}
+            80% {opacity:1;}
+            100% {opacity:0;}
+        }
+        
+        @keyframes slidein {
+            0% { margin-left:-800px; }
+            20% { margin-left:-800px; }
+            35% { margin-left:0px; }
+            100% { margin-left:0px; }
+        }
+        
+        @keyframes reveal {
+            0% {opacity:0;width:0px;}
+            20% {opacity:1;width:0px;}
+            30% {width:500px;}
+            80% {opacity:1;}
+            100% {opacity:0;width:500px;}
+        }
+
+    /* mini navbar */
+    .parent2{
+        padding: 0.5rem;
+        display: flex;
+        justify-content: space-evenly;
+    }
+    .parent2 a{
+        text-decoration: none;
+        padding: 0.5rem;
+        text-align: center;
+        font-size: 1rem;
+        color: rgb(127, 128, 129);
+        font-weight: 500;
+    }
+    .parent2 a:hover{
+        color: rgb(10, 10, 186);
+    }
+
+    .parent3{/*
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;*/
+        width: 600px;
+    }
+    .child1{
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        background-color: rgb(228, 228, 245);
+        width: 600px;
+        margin-top: 3rem;
+        padding: 3rem;
+    }
+    .child1 #box{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        width: 160px;
+        padding: 10px;
+        background-color: white;
+        justify-content: space-between;
+        gap: 10px;
+        border-radius: 15px;
+    }
+    .child1 #box img{
+        width: 100px;
+    }
+    #green{
+        background-color: rgb(233, 255, 233);
+        padding: 0px 3px;
+        border-radius: 3px;
+    }
+    #red{
+        background-color: rgb(254, 238, 238);
+        padding: 0px 2px;
+        border-radius: 3px;
+    }
+    .green{
+        background-color: rgb(205, 251, 205);
+        color: rgb(0, 109, 0);
+        font-weight: 600;
+        font-size: 0.7rem;
+        padding: 2px 7px;
+        border-radius: 1px;
+    }
+    .red{
+        background-color: rgb(243, 200, 200);
+        color: rgb(171, 5, 5);
+        font-weight: 600;
+        font-size: 0.7rem;
+        padding: 2px 7px;
+        border-radius: 1px;
+    }
+
+    .child2{
+        display: flex;
+        width: 600px;
+        padding: 1.5rem;
+        font-size: 1.2rem;
+    }
+    .child3{
+        display: flex;
+        align-items: center; 
+        width: 600px;
+        margin-top: 1rem;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        padding: 2rem;
+        gap: 2rem;
+    }
+    .child3 h5{
+        font-weight: 700;
+    }
+     button{
+        background-color: rgb(70, 114, 236);
+        border: none;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+    #parent4{
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        width: 600px;
+    }
+    #parent4 img{
+        margin-top: 1rem;
+        width: 100%;
+    }
+}
+    @media (max-width: 870px){
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 100px;
+        }
+        a{
+            text-decoration: none;
+        }
+    
+        /* NavBar */
+        nav{
+            
+            padding: 20px;
+        }
+        nav {
+            position: fixed;
+            width: 90%;
+            z-index: 999;
+            padding: 30px 0;
+            transition: all 0.3s ease;
+          }
+          
+        nav {
+            padding: 15px 0;
+            background: #d6dde5;
+          }
+        nav ul{
+            display: flex;
+            justify-content: space-around;
+        }
+        nav ul a{
+            text-decoration: none;
+            font-size: 1.25rem;
+            color: black;
+            font-weight: 600;
+        }
+        nav .logo a {
+            color: #fff;
+            font-size: 25px;
+            font-weight: 600;
+          }
+          
+          /*  Nav Logo Span Linear-Gradient  */
+          nav .logo a span {
+            background: linear-gradient(135deg, #041d3d, #fff, crimson);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+          }
+          
+          nav.sticky .logo a span {
+            color: #fff;
+          }
+         /* arrow */
+         .arrows{
+            display: flex;
+            gap: 3.75rem;
+         }
+         .arrow {
+            transform: translate(-50%, -50%);
+            transform: rotate(270deg);
+            cursor: pointer;
+        }
+        
+        .arrow span {
+            display: block;
+            width: 1.5vw;
+            height: 1.5vw;
+            border-bottom: 5px solid rgb(0, 0, 0);
+            border-right: 5px solid rgb(0, 0, 0);
+            transform: rotate(45deg);
+            margin: -10px;
+            animation: animate 2s infinite;
+        }
+        
+        .arrow span:nth-child(2) {
+            animation-delay: -0.2s;
+        }
+        
+        .arrow span:nth-child(3) {
+            animation-delay: -0.4s;
+        }
+        
+        @keyframes animate {
+            0% {
+                opacity: 0;
+                transform: rotate(45deg) translate(-20px, -20px);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: rotate(45deg) translate(20px, 20px);
+            }
+        }
+    
+        /* Heading */
+            @import url('https://fonts.googleapis.com/css?family=Roboto:300');
+    
+            .parent1 {
+                margin-top: 7rem;
+                margin-bottom: 2rem;
+              text-align:center;
+              color:#555;
+              font-family:'Roboto';
+              font-weight:800;
+              font-size:20px;
+              overflow:hidden;
+            }
+            
+            .parent1 div {
+              display:inline-block;
+              overflow:hidden;
+              white-space:nowrap;
+            }
+        /* mini navbar */
+        .parent2{
+            padding: 0rem;
+            display: flex;
+            justify-content: space-evenly;
+            gap: 1.5rem;
+        }
+        .parent2 a{
+            text-decoration: none;
+            display: flex;
+            text-align: center;
+            font-size: 1rem;
+            color: rgb(127, 128, 129);
+            font-weight: 500;
+        }
+        .parent2 a:hover{
+            color: rgb(10, 10, 186);
+        }
+    
+        .parent3{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 600px;
+        }
+        .child1{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.6rem;
+            background-color: rgb(228, 228, 245);
+            width: 500px;
+            margin-top: 3rem;
+            padding: 3rem;
+        }
+        .child1 #box{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            width: 170px;
+            padding: 10px;
+            background-color: white;
+            justify-content: space-between;
+            gap: 10px;
+            border-radius: 15px;
+        }
+        .child1 #box img{
+            width: 100px;
+        }
+        #green{
+            background-color: rgb(233, 255, 233);
+            padding: 0px 3px;
+            border-radius: 3px;
+        }
+        #red{
+            background-color: rgb(254, 238, 238);
+            padding: 0px 2px;
+            border-radius: 3px;
+        }
+        .green{
+            background-color: rgb(205, 251, 205);
+            color: rgb(0, 109, 0);
+            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 2px 7px;
+            border-radius: 1px;
+        }
+        .red{
+            background-color: rgb(243, 200, 200);
+            color: rgb(171, 5, 5);
+            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 2px 7px;
+            border-radius: 1px;
+        }
+    
+        .child2{
+
+            display: flex;
+            width: 350px;
+            font-size: 1.2rem;
+            padding-bottom: 2rem;
+        }
+        .child3{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            align-items: center; 
+            width: 400px;
+            margin-top: 1rem;
+            padding: 1rem;
+            gap: 1rem;
+            
+        }
+        .child3 h5{
+            font-weight: 600;
+        }
+        section{
+            padding: 1rem;
+        }
+         button{
+            background-color: rgb(70, 114, 236);
+            border: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+        #parent4{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 600px;
+        }
+        #parent4 img{
+            margin-top: 1rem;
+            width: 400px;
+        }
+        .img1{
+            width: 450px !important;
+        }
+        #parent5 {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+        #parent5 .child2{
+            width: 100%;
+            display: flex;
+            padding: 1.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+        #parent5 h3{
+            text-align: center;
+            padding: 1rem;
+        }
+        #parent5 h1{
+            text-align: center;
+            padding: 1rem;
+        }
+        li{
+            text-align: start;
+            margin: 0rem 1rem;
+        }
+
+        #parent6 {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+        #parent6 .child2{
+            width: 100%;
+            display: flex;
+            padding: 1.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+        #parent6 h3{
+            text-align: center;
+            padding: 1rem;
+        }
+        #parent6 h1{
+            text-align: center;
+            padding: 1rem;
+        }
+        #parent7 {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+        #parent7 .child2{
+            width: 100%;
+            display: flex;
+            padding: 1.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+        #parent7 h3{
+            text-align: center;
+            padding: 1rem;
+        }
+        #parent7 h1{
+            text-align: center;
+            padding: 1rem;
+        }
+    }
+</style>
+<body>
+    <nav>
+        <ul>
+            <div class="logo"><a href="#"><span>RSCOE</span><span>.com</span></a></div>
+            <div class="arrows">
+                <div class="arrow">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+               <a href="./form.html"><button>Let's Try</button></a>
+            </div>
+           
+        </ul>
+    </nav>
+    <section class="parent1">
+        <div>Sentiment</div> 
+        <div> 
+            <span>Analysis : A Definitive Guide</span>
+        </div>
+    </section>
+    <div class="container">
+        <section class="parent2">
+            <a href="#parent4">What is Sentiment Analysis?</a>
+            <a href="#parent5">Sentiment Analysis Example</a>
+            <a href="#parent6">How Does It Work?</a>
+            <a href="#parent7">Sentiment Anaysis Tools</a>
+        </section>
+        <section class="parent3">
+            <div class="child1">
+                <div id="box">
+                    <span><img src="https://gifdb.com/images/high/blushing-hug-emoji-3oiog8j560s1blzu.gif" alt=""></span> 
+                    <span>
+                        <span>My experience so far has been</span>
+                        <span id="green">fantastic!</span>
+                    </span>
+                    <span>
+                        <span class="green">POSITIVE</span>                    
+                    </span>
+    
+                </div>
+                <div id="box">
+                    <span><img src="https://media.tenor.com/_jhHC8tu4GkAAAAj/angry-emoji.gif" alt="" style="width: 80px; padding-top: 10px"></span> 
+                    <span>
+                        <span>Your support team is</span>
+                        <span id="red">useless</span>
+                    </span>
+                    <span>
+                        <span class="red">NEGATIVE</span>
+                    </span>
+                </div>
+            </div>
+            <div class="child2">
+                Sentiment analysis (or opinion mining) is a natural language processing (NLP) technique used to determine whether data is positive, negative or neutral. Sentiment analysis is often performed on textual data to help businesses monitor brand and product sentiment in customer feedback, and understand customer needs.
+            </div>
+            <div class="child3">
+                <h5>Start analyzing your text for sentiment</h5>
+                <a href="./form.html"><button>Let's Try</button></a>
+            </div>
+        </section>
+        <section id="parent4">
+            <h1>What Is Sentiment Analysis?</h1>
+            <img src="https://monkeylearn.com/static/d46efcc4ca76c562990fbafd2fca8393/bf4ee/basics.webp" alt="">
+            <div class="child2">
+                Sentiment analysis is the process of detecting positive or negative sentiment in text. It’s often used by businesses to detect sentiment in social data, gauge brand reputation, and understand customers.
+            </div>
+            <h1>Types of Sentiment Analysis</h1>
+            <div class="child2">
+                Sentiment analysis focuses on the polarity of a text (positive, negative, neutral) but it also goes beyond polarity to detect specific feelings and emotions (angry, happy, sad, etc), urgency (urgent, not urgent) and even intentions (interested v. not interested).
+            </div>
+            <div class="child2">
+                Depending on how you want to interpret customer feedback and queries, you can define and tailor your categories to meet your sentiment analysis needs. In the meantime, here are some of the most popular types of sentiment analysis:
+            </div>
+            <h3>Graded Sentiment Analysis</h3>
+            <div class="child2">If polarity precision is important to your business, you might consider expanding your polarity categories to include different levels of positive and negative:</div>
+            <ul>
+                <li>Very positive</li>
+                <li>Positive</li>
+                <li>Neutral</li>
+                <li>Negative</li>
+                <li>Very negative</li>
+            </ul>
+            <div class="child2">This is usually referred to as graded or fine-grained sentiment analysis, and could be used to interpret 5-star ratings in a review, for example:</div>
+            <ul>
+                <li>Very Positive = 5 stars</li>
+                <li>Very Negative = 1 star</li>
+            </ul>
+            <h3>Emotion detection</h3>
+            <div class="child2">
+                Emotion detection sentiment analysis allows you to go beyond polarity to detect emotions, like happiness, frustration, anger, and sadness.
+                Many emotion detection systems use lexicons (i.e. lists of words and the emotions they convey) or complex machine learning algorithms.
+            </div>
+            <div class="child2">One of the downsides of using lexicons is that people express emotions in different ways. Some words that typically express anger, like bad or kill (e.g. your product is so bad or your customer support is killing me) might also express happiness (e.g. this is bad ass or you are killing it).</div>
+        </section>
+
+        <section id="parent5">
+            <h1>Sentiment Analysis Examples</h1>
+            <div class="child2">To understand the goal and challenges of sentiment analysis, here are some examples:</div>
+            <h3>Basic examples of sentiment analysis data</h3>
+            <ul>
+                <li>Netflix has the best selection of films</li>
+                <li>Hulu has a great UI</li>
+                <li>I dislike like the new crime series</li>
+                <li>I hate waiting for the next series to come out</li>
+            </ul>
+            <h3>More challenging examples of sentiment analysis</h3>
+            <ul>
+                <li>I do not dislike horror movies. (phrase with negation)</li>
+                <li>Disliking horror movies is not uncommon. (negation, inverted word order)</li>
+                <li>Sometimes I really hate the show. (adverbial modifies the sentiment)</li>
+                <li>I love having to wait two months for the next series to come out! ( sarcasm)</li>
+                <li>The final episode was surprising with a terrible twist at the end (negative term used in a positive way)</li>
+                <li>The film was easy to watch but I would not recommend it to my friends. (difficult to categorize)</li>
+                <li>I LOL’d at the end of the cake scene (often hard to understand new terms)</li>
+            </ul>
+            <h1>Case Study: Sentiment analysis on TrustPilot Reviews</h1>
+            <div class="child2">Chewy is a pet supplies company – an industry with no shortage of competition, so providing a superior customer experience (CX) to their customers can be a massive difference maker.</div>
+            <div class="child2">For this reason, online reviews can be an extremely valuable source of information to gain customer insights to improve their CX. Chewy has thousands of reviews in TrustPilot, this is what their review archive looks like:</div>
+            <img src="https://monkeylearn.com/static/83e6a0d2bb4a9bbd2365fd28ed7d9c3c/e81ba/trustpilot.webp" alt="" width="700px" style="margin-bottom: 2rem;" class="img1">
+        </section>
+
+        <section id="parent6">
+            <h1>How Does Sentiment Analysis Work?</h1>
+            <img src="https://monkeylearn.com/static/8ea25a7ba1d2bd9d6ab947fc1d9a0390/bf4ee/how-does-it-work.webp" alt="" width="700px" style="margin-bottom: 2rem;" class="img1">
+            <div class="child2">Sentiment analysis, otherwise known as opinion mining, works thanks to natural language processing (NLP) and machine learning algorithms, to automatically determine the emotional tone behind online conversations.</div>
+            <div class="child2">There are different algorithms you can implement in sentiment analysis models, depending on how much data you need to analyze, and how accurate you need your model to be. We’ll go over some of these in more detail, below.</div>
+            <img src="https://monkeylearn.com/static/30607381159c995d7e967c1f0530e50f/95a1e/how-does-sentiment-analysis-work%402x.webp" alt="" style="max-width: 700px;" class="img1">
+        </section>
+
+        <section id="parent7">
+            <h1>Sentiment Analysis Tools & Tutorials</h1>
+            <img src="https://monkeylearn.com/static/bfa730849977be4a41a14b52572ce50c/b083c/resources.webp" alt="" width="700px" class="img1">
+            <div class="child2">Sentiment analysis is a vast topic, and it can be intimidating to get started. Luckily, there are many useful resources, from helpful tutorials to all kinds of free online tools, to help you take your first steps.</div>
+            <h3>Free Online Sentiment Analysis Tools</h3>
+            <div class="child2">A good start to your journey is to simply play around with a sentiment analysis tool. A little first-hand experience will help you understand how it works</div>
+        </section>
+    </div>
+   
+</body>
+</html>
